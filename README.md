@@ -60,7 +60,7 @@
 
 1. **프로젝트 클론**:
     ```bash
-    git clone https://github.com/yourusername/reviewservice.git
+    git clone https://github.com/0216tw/reviewservice.git
     ```
    
 2. **Spring Boot에서 프로젝트 불러오기**:
