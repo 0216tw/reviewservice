@@ -1,34 +1,3 @@
-document.addEventListener("DOMContentLoaded", function() {
-
-    // 검색 버튼 클릭 이벤트
-    document.getElementById("btnNavbarSearch").addEventListener("click", function() {
-        searchReviews();
-    });
-
-    // 팝업 외부 클릭 시 닫기
-    document.querySelectorAll('.popup').forEach(popup => {
-        popup.addEventListener("click", function(event) {
-            if (event.target === this) {
-                this.style.display = "none";
-            }
-        });
-    });
-});
-
-function searchReviews() {
-    const query = document.getElementById("searchInput").value;
-    alert("검색 기능은 아직 구현되지 않았습니다. 검색어: " + query);
-}
-
-function openPostPopup() {
-    document.getElementById("postPopup").style.display = "flex";
-}
-
-function closePostPopup() {
-    document.getElementById("postPopup").style.display = "none";
-}
-
-
 function viewReview(reviewNo) {
     fetch(`/reviews/${reviewNo}`)
         .then(response => {
@@ -37,37 +6,42 @@ function viewReview(reviewNo) {
             }
             return response.json();
         })
-        .then(review => {
+        .then(data => {
+            // 리뷰 데이터 추출
+            const review = data.reivew;
+            const images = data.images || [];
+
             // 제목과 내용 업데이트
             document.getElementById("viewTitle").textContent = review.reviewTitle;
             document.getElementById("viewContent").textContent = review.reviewContent;
 
             // 이미지 슬라이더 초기화
-            const images = review.images || [];
-            images.forEach(imageUrl => {
-                            const img = document.createElement("img");
-                            img.src = imageUrl;
-                            img.alt = "Review Image";
-                            img.addEventListener("click", () => {
-                                openImageModal(imageUrl);
-                            });
-                            viewImages.appendChild(img);
-                        });
+            const viewImages = document.getElementById("viewImages");
+            viewImages.innerHTML = ''; // 기존 이미지를 제거합니다.
 
-                        document.getElementById("viewPopup").style.display = "flex";
-                    })
-                    .catch(error => {
-                        alert(error.message);
-                    });
+            images.forEach(image => {
+                const img = document.createElement("img");
+                img.src = `${image.imagePath}`; // 이미지 URL이 어떻게 제공되는지에 따라 경로 조정 필요
+                img.alt = `${image.imageName}`;
+                img.addEventListener("click", () => {
+                    openImageModal(img.src);
+                });
+                viewImages.appendChild(img);
+            });
+
+            document.getElementById("viewPopup").style.display = "flex";
+        })
+        .catch(error => {
+            alert(error.message);
+        });
 }
 
 function closeViewPopup() {
     document.getElementById("viewPopup").style.display = "none";
 }
 
-// 이미지 확대 모달 (선택 사항)
+// 이미지 확대 모달
 function openImageModal(imageUrl) {
-    // 여기에 이미지 확대 모달을 구현할 수 있습니다.
     const imageModal = document.createElement("div");
     imageModal.style.position = "fixed";
     imageModal.style.top = "0";
@@ -86,4 +60,14 @@ function openImageModal(imageUrl) {
         document.body.removeChild(imageModal);
     });
     document.body.appendChild(imageModal);
+}
+
+// 리뷰 작성 팝업 열기
+function openPostPopup() {
+    document.getElementById("postPopup").style.display = "flex";
+}
+
+// 리뷰 작성 팝업 닫기
+function closePostPopup() {
+    document.getElementById("postPopup").style.display = "none";
 }

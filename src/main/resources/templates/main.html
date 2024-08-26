@@ -79,63 +79,68 @@
 }
 
 </style>
-
-    </style>
 </head>
+<body>
+    <main class="container-fluid px-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="mt-4">환영합니다. <span th:text="${username}"></span> 님</h1>
 
-<main class="container-fluid px-4">
-    <div class="d-flex justify-content-between align-items-center">
-        <h1 class="mt-4">환영합니다. <span th:text="${username}"></span> 님</h1>
+            <div th:if="${username == 'admin'}">
+                <a id="adminDashboardLink" href="#" class="btn btn-secondary mb-4">대시보드 이동</a>
+            </div>
 
-        <div th:if="${username == 'admin'}">
-            <a id="adminDashboardLink" href="#" class="btn btn-secondary mb-4">대시보드 이동</a>
+            <form action="/logout" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-danger mb-4">로그아웃</button>
+            </form>
+        </div>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">리뷰 게시판</li>
+        </ol>
+
+        <!-- 검색 창 중앙 정렬 -->
+        <!-- 검색 창과 리뷰 작성 버튼 -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="search-container d-flex" style="flex-grow: 1; margin-right: 10px;">
+                <div class="input-group" style="width: 100%;">
+                    <input class="form-control" type="text" placeholder="키워드 검색... 내용에 해당 키워드가 있는 리뷰를 검색합니다" aria-label="Search" aria-describedby="btnNavbarSearch" id="searchInput" />
+                    <button class="btn btn-primary" id="btnNavbarSearch" type="button" style="flex-shrink: 0; width: 120px;"><i class="fas fa-search"></i> 검색</button>
+                </div>
+            </div>
+
+            <!-- 리뷰 작성 버튼 -->
+            <button class="btn btn-primary" onclick="openPostPopup()">리뷰 작성</button>
         </div>
 
-        <form action="/logout" method="post" style="display:inline;">
-            <button type="submit" class="btn btn-danger mb-4">로그아웃</button>
-        </form>
-    </div>
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">리뷰 게시판</li>
-    </ol>
+        <!-- 리뷰 테이블 -->
+        <div class="card mb-4 mt-4">
+            <div class="card-header">
+                <i class="fas me-1"></i>
+                아래 리뷰를 클릭해보세요.
+            </div>
+            <div class="card-body">
+                <table id="datatablesSimple">
+                    <thead>
+                    <tr>
+                        <th>작성자</th>
+                        <th>제목</th>
+                        <th>내용</th>
+                        <th>작성일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- th:each로 서버에서 받은 데이터를 반복 출력 -->
+                    <tr th:each="review : ${reviews}">
+                        <td th:text="${review.reviewerId}">작성자</td>
+                        <td><a href="#" th:text="${review.reviewTitle}" th:onclick="'viewReview(' + ${review.reviewNo} + ')'">제목</a></td>
+                        <td th:text="${review.reviewContent}">내용</td>
+                        <td th:text="${review.reviewDate}">작성일</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
 
-    <!-- 검색 창 중앙 정렬 -->
-    <div class="search-container">
-        <div class="input-group">
-            <input class="form-control" type="text" placeholder="리뷰 검색..." aria-label="Search" aria-describedby="btnNavbarSearch" id="searchInput" />
-            <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i> 검색</button>
-        </div>
-    </div>
-
-    <!-- 리뷰 테이블 -->
-    <div class="card mb-4 mt-4">
-        <div class="card-header">
-            <i class="fas me-1"></i>
-            아래 리뷰를 클릭해보세요.
-        </div>
-        <div class="card-body">
-            <table id="datatablesSimple">
-                <thead>
-                <tr>
-                    <th>작성자</th>
-                    <th>제목</th>
-                    <th>내용</th>
-                    <th>작성일</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- th:each로 서버에서 받은 데이터를 반복 출력 -->
-                <tr th:each="review : ${reviews}">
-                    <td th:text="${review.reviewerId}">작성자</td>
-                    <td><a href="#" th:text="${review.reviewTitle}" th:onclick="'viewReview(' + ${review.reviewNo} + ')'">제목</a></td>
-                    <td th:text="${review.reviewContent}">내용</td>
-                    <td th:text="${review.reviewDate}">작성일</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</main>
 
 
 <!-- 리뷰 작성 팝업 -->
