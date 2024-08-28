@@ -18,9 +18,11 @@ CREATE TABLE TB_REVIEW (
 @Table(name = "tb_review")
 public class Review {
 
+
     @Id
     @Column(name = "review_no")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //자동으로 PK을 관리해준다. +1전략이다.
+    @GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "tb_review_seq") //자동으로 PK을 관리해준다. +1전략이다.
+    @SequenceGenerator(name = "tb_review_seq", sequenceName = "tb_review_seq", allocationSize = 1)
     private int reviewNo;
 
     @Column(name = "reviewer_id")

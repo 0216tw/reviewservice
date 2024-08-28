@@ -1,7 +1,7 @@
 package com.project.reviewservice.controller.home;
 
 import com.project.reviewservice.domain.user.User;
-import com.project.reviewservice.service.user.ReviewService;
+import com.project.reviewservice.service.review.ReviewService;
 import com.project.reviewservice.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +45,8 @@ public class HomeViewController {
         // Model을 써도 redirect를 할 경우 해당 Model을 쓸 수가 없음
         // 그래서 RedirectAttributes를 활용하면 Redirect되는 사이트에 대해서도 값을 줄 수 있음
         redirectAttributes.addFlashAttribute("username", session.getAttribute("username"));
+        redirectAttributes.addFlashAttribute("userId", session.getAttribute("userId"));
+
 
         return "redirect:/main";
     }
@@ -57,6 +59,7 @@ public class HomeViewController {
         }
 
         redirectAttributes.addFlashAttribute("username", session.getAttribute("username"));
+        redirectAttributes.addFlashAttribute("userId", session.getAttribute("userId"));
         return "redirect:/main";
     }
 
@@ -67,10 +70,8 @@ public class HomeViewController {
             return "/login";
         }
         model.addAttribute("username" , session.getAttribute("username"));
-
-        //게시물 조회
-        model.addAttribute("reviews" , reviewService.findAllReviews());
-
+        model.addAttribute("userId", session.getAttribute("userId"));
+        model.addAttribute("reviews", reviewService.findAllReviews());
         return "main";
     }
 
@@ -88,8 +89,10 @@ public class HomeViewController {
             } else {
                 session.setAttribute("username" , user.getName()) ; //사용자 이름을 세션에 저장
             }
+            session.setAttribute("userId" , user.getUserId()) ; //사용자 이름을 세션에 저장
 
             redirectAttributes.addFlashAttribute("username" , session.getAttribute("username"));
+            redirectAttributes.addFlashAttribute("userId" , session.getAttribute("userId"));
 
             return "redirect:/main";
         }
@@ -112,5 +115,11 @@ public class HomeViewController {
         return "redirect:/login";
     }
 
+
+    @GetMapping("/main/custom-paging")
+    public String mainPageUsingPaging() {
+
+        return "custom-paging";
+    }
 
 }

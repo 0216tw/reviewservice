@@ -86,12 +86,16 @@
             <h1 class="mt-4">환영합니다. <span th:text="${username}"></span> 님</h1>
 
             <div th:if="${username == 'admin'}">
-                <a id="adminDashboardLink" href="#" class="btn btn-secondary mb-4">대시보드 이동</a>
+
+                <form id="analysisRequest" action="/review-analysis" method="post" style="display:inline;">
+                    날짜입력(yyyymmdd) : <input type="text" name="day" id="dayInput">
+                    <button  type="submit" class="btn btn-danger mb-4">분석 요청</button>
+                </form>
+
             </div>
 
-            <form action="/logout" method="post" style="display:inline;">
-                <button type="submit" class="btn btn-danger mb-4">로그아웃</button>
-            </form>
+            <a href="/main/custom-paging" onclick="alert('만드는중..^^')" class="btn btn-info mb-4">페이징 직접 구현 버전 보기</a>
+
         </div>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item active">리뷰 게시판</li>
@@ -118,6 +122,7 @@
                 아래 리뷰를 클릭해보세요.
             </div>
             <div class="card-body">
+
                 <table id="datatablesSimple">
                     <thead>
                     <tr>
@@ -137,6 +142,8 @@
                     </tr>
                     </tbody>
                 </table>
+
+
             </div>
         </div>
     </main>
@@ -148,7 +155,7 @@
     <div class="popup-content">
         <span class="close-button" onclick="closePostPopup()">&times;</span>
         <h2>리뷰 작성</h2>
-        <form id="postForm" method="post" enctype="multipart/form-data">
+        <form id="saveReview" action="/review/saveReview" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="postTitle" class="form-label">제목</label>
                 <input type="text" class="form-control" id="postTitle" name="title" required>
