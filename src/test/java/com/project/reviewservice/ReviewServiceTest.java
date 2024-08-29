@@ -14,6 +14,7 @@ public class ReviewServiceTest {
     @Autowired
     ReviewService reviewService;
 
+
     @Test
     public void 검색어_기준으로_데이터_검색하기() {
 
@@ -34,6 +35,10 @@ public class ReviewServiceTest {
         for(Review re : reviews) {
             System.out.println(re.toString());
         }
+    }
 
+    @Test
+    public void 로그파일을_잘읽어오는지_테스트() {
+        reviewService.saveReviewClickEventPerOneMinute();
     }
 }
